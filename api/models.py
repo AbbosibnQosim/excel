@@ -36,7 +36,7 @@ class Object(models.Model):
     country=models.ForeignKey(Country,on_delete=models.CASCADE,verbose_name="Давлат")
     code=models.CharField(max_length=512,verbose_name="Код",blank=True)
     obtype=models.ForeignKey(ObjectType,on_delete=models.CASCADE,verbose_name="Объект тури")
-    name=models.TextField(blank=True,verbose_name="Объект номи")
+    name=models.TextField(blank=False,verbose_name="Объект номи")
     address=models.TextField(blank=True,verbose_name="Манзил")
     coordination=models.CharField(max_length=256,verbose_name="Кордината",blank=True)
     phone=models.TextField(blank=True,verbose_name="Телефон")
