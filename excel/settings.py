@@ -25,15 +25,136 @@ SECRET_KEY = 'w)d)u1k6$%1z53p7^g3cjr*653%wsjq(gvi4e6q78tthg_!z!c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['10.10.11.166','localhost']
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = 'media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, '/media')
 MEDIA_URL = '/media/'
-# Application definition
+# CKEDITOR_CONFIGS = {
+#    'default': {
+#        'toolbar_Full': [
+#             ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+#             ['Link', 'Unlink', 'Anchor'],
+#             ['Image', 'Flash', 'Table', 'HorizontalRule'],
+#             ['TextColor', 'BGColor'],
+#             ['Smiley', 'SpecialChar'], ['Source'],
+#             ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+#             ['NumberedList','BulletedList'],
+#             ['Indent','Outdent'],
+#             ['Maximize'],
+#         ],
+#         'extraPlugins': 'justify,liststyle,indent',
+#    },
+# }
+CKEDITOR_CONFIGS = {
+    'default': {
+        # Toolbar configuration
+        # name - Toolbar name
+        # items - The buttons enabled in the toolbar
+        'toolbar_DefaultToolbarConfig': [
+           { 'name': 'document', 'items': [ 'Source', '-', 'Save', 'NewPage', 'ExportPdf', 'Preview', 'Print', '-', 'Templates' ] },
+		{ 'name': 'clipboard', 'items': [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+		{ 'name': 'editing', 'items': [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+		{ 'name': 'forms', 'items': [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+		'/',
+		{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
+		{ 'name': 'paragraph', 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+		{ 'name': 'links', 'items': [ 'Link', 'Unlink', 'Anchor' ] },
+		{ 'name': 'insert', 'items': [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
+		'/',
+		{ 'name': 'styles', 'items': [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+		{ 'name': 'colors', 'items': [ 'TextColor', 'BGColor' ] },
+		{ 'name': 'tools', 'items': [ 'Maximize', 'ShowBlocks' ] },
+		{ 'name': 'about', 'items': [ 'About' ] },
+        {
+                'name': 'extra',
+                'items': ['Link', 'Unlink', 'Blockquote', 'Image', 'Table',
+                          'CodeSnippet', 'Mathjax', 'Embed', ],
+        },
+            
+        ],
 
+        # This hides the default title provided by CKEditor
+        'title': False,
+
+        # Use this toolbar
+        'toolbar': 'DefaultToolbarConfig',
+
+        # Which tags to allow in format tab
+        'format_tags': 'p;h1;h2',
+
+        # Remove these dialog tabs (semicolon separated dialog:tab)
+        'removeDialogTabs': ';'.join([
+            'image:advanced',
+            'image:Link',
+            'link:upload',
+            'table:advanced',
+            'tableProperties:advanced',
+        ]),
+        'linkShowTargetTab': False,
+        'linkShowAdvancedTab': False,
+
+        # CKEditor height and width settings
+        'height': '250px',
+        'width': 'auto',
+        'forcePasteAsPlainText ': True,
+
+        # Class used inside span to render mathematical formulae using latex
+        'mathJaxClass': 'mathjax-latex',
+
+        # Mathjax library link to be used to render mathematical formulae
+        'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG',
+
+        # Tab = 4 spaces inside the editor
+        'tabSpaces': 4,
+
+        # Extra plugins to be used in the editor
+        'extraPlugins': ','.join([
+            # 'devtools',  # Shows a tooltip in dialog boxes for developers
+            'mathjax',  # Used to render mathematical formulae
+            'codesnippet',  # Used to add code snippets
+            'image2',  # Loads new and better image dialog
+            'embed',  # Used for embedding media (YouTube/Slideshare etc)
+            'tableresize',  # Used to allow resizing of columns in tables
+        ]),
+    }
+}
+# Application definition
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'green',
+        'color': '#44b78b',
+        'title': 'Green'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#2faa60',
+        'title': 'Light Green'
+    },
+    {
+        'theme': 'light-violet',
+        'color': '#a464c4',
+        'title': 'Light Violet'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#5EADDE',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]
+
+JET_SIDE_MENU_COMPACT = True
 INSTALLED_APPS = [
-    'tinymce',
+    'jet',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,9 +163,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
-    'import_export'
+    'import_export',
+    'ckeditor',
+    'ckeditor_uploader'    #'tinymce',
 ]
-
+CKEDITOR_UPLOAD_PATH = "uploads/"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -129,13 +252,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 TINYMCE_DEFAULT_CONFIG = {
     "height": "320px",
     "width": "960px",
+    'file_picker_types': 'file image media',
     "menubar": "file edit view insert format tools table help",
     "plugins": "advlist autolink lists link image imagetools charmap print preview anchor searchreplace visualblocks code "
     "fullscreen insertdatetime media table paste code help wordcount spellchecker",
-    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft image "
     "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
     "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
     "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "

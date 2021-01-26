@@ -479,6 +479,50 @@ ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_use
 
 
 --
+-- Name: dashboard_userdashboardmodule; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dashboard_userdashboardmodule (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    module character varying(255) NOT NULL,
+    app_label character varying(255),
+    "user" integer NOT NULL,
+    "column" integer NOT NULL,
+    "order" integer NOT NULL,
+    settings text NOT NULL,
+    children text NOT NULL,
+    collapsed boolean NOT NULL,
+    CONSTRAINT dashboard_userdashboardmodule_column_check CHECK (("column" >= 0)),
+    CONSTRAINT dashboard_userdashboardmodule_user_check CHECK (("user" >= 0))
+);
+
+
+ALTER TABLE public.dashboard_userdashboardmodule OWNER TO postgres;
+
+--
+-- Name: dashboard_userdashboardmodule_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.dashboard_userdashboardmodule_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.dashboard_userdashboardmodule_id_seq OWNER TO postgres;
+
+--
+-- Name: dashboard_userdashboardmodule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.dashboard_userdashboardmodule_id_seq OWNED BY public.dashboard_userdashboardmodule.id;
+
+
+--
 -- Name: django_admin_log; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -604,6 +648,93 @@ CREATE TABLE public.django_session (
 ALTER TABLE public.django_session OWNER TO postgres;
 
 --
+-- Name: jet_bookmark; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jet_bookmark (
+    id integer NOT NULL,
+    url character varying(200) NOT NULL,
+    title character varying(255) NOT NULL,
+    "user" integer NOT NULL,
+    date_add timestamp with time zone NOT NULL,
+    CONSTRAINT jet_bookmark_user_check CHECK (("user" >= 0))
+);
+
+
+ALTER TABLE public.jet_bookmark OWNER TO postgres;
+
+--
+-- Name: jet_bookmark_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jet_bookmark_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jet_bookmark_id_seq OWNER TO postgres;
+
+--
+-- Name: jet_bookmark_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jet_bookmark_id_seq OWNED BY public.jet_bookmark.id;
+
+
+--
+-- Name: jet_pinnedapplication; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jet_pinnedapplication (
+    id integer NOT NULL,
+    app_label character varying(255) NOT NULL,
+    "user" integer NOT NULL,
+    date_add timestamp with time zone NOT NULL,
+    CONSTRAINT jet_pinnedapplication_user_check CHECK (("user" >= 0))
+);
+
+
+ALTER TABLE public.jet_pinnedapplication OWNER TO postgres;
+
+--
+-- Name: jet_pinnedapplication_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jet_pinnedapplication_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jet_pinnedapplication_id_seq OWNER TO postgres;
+
+--
+-- Name: jet_pinnedapplication_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jet_pinnedapplication_id_seq OWNED BY public.jet_pinnedapplication.id;
+
+
+--
+-- Name: thumbnail_kvstore; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.thumbnail_kvstore (
+    key character varying(200) NOT NULL,
+    value text NOT NULL
+);
+
+
+ALTER TABLE public.thumbnail_kvstore OWNER TO postgres;
+
+--
 -- Name: api_country id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -688,6 +819,13 @@ ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT n
 
 
 --
+-- Name: dashboard_userdashboardmodule id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dashboard_userdashboardmodule ALTER COLUMN id SET DEFAULT nextval('public.dashboard_userdashboardmodule_id_seq'::regclass);
+
+
+--
 -- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -709,6 +847,20 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: jet_bookmark id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jet_bookmark ALTER COLUMN id SET DEFAULT nextval('public.jet_bookmark_id_seq'::regclass);
+
+
+--
+-- Name: jet_pinnedapplication id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jet_pinnedapplication ALTER COLUMN id SET DEFAULT nextval('public.jet_pinnedapplication_id_seq'::regclass);
+
+
+--
 -- Data for Name: api_country; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -727,10 +879,13 @@ COPY public.api_country (id, name) FROM stdin;
 --
 
 COPY public.api_object (id, code, name, address, coordination, phone, mails, resultfile, obtype_id, description, info_sys, ips, subdomains, verified, country_id, content, user_id, created_at, updated_at) FROM stdin;
-6	sada	Afg'oniston Ichki ishlar vazirligi	Airport Rd, Kabul, Afghanistan	34.56488250186504, 69.19022074717908	+93 (0) 20 220 1758	info@moi.gov.af		1	asdasd	asdasdsadsa	103.132.98.215	asdasdadasd	f	1	<p>asdasasddasdsad</p>	3	2021-01-21 12:43:34.961507+05	2021-01-21 16:50:09.00822+05
-4	sadad	Afg’oniston Mudofaa vazirligi	Pule-Mahmood Khan, PD 2 , 1001 , Kabul, Afghanistan	34.5241684804803, 69.18559441565499	+93(0) 20 266 1456	info@mod.gov.af	brute_ctXCoi4.py	2	sad	sad	103.132.98.215	asd	f	1	<p>asdasda</p>	1	2021-01-21 12:43:34.961507+05	2021-01-21 16:52:58.924213+05
-7	132213	Qizlar savdo anjumani	Emerat	213134545			da16a874bb8bacc209d312406ae90f91.jpg	1					f	6		1	2021-01-21 16:57:22.618945+05	2021-01-21 16:57:22.619001+05
-8		Qozog'iston banklari						4					f	4		1	2021-01-21 18:15:27.391587+05	2021-01-21 18:15:59.095213+05
+13		Qozog'iston davlatiga tegishli saylar						7					f	4		4	2021-01-22 11:45:31.154505+05	2021-01-22 11:48:33.03097+05
+16		Qozog'iston Transport vazirligi						2					f	4		4	2021-01-22 11:51:05.32139+05	2021-01-22 11:51:05.321402+05
+17		Qozog'iston IT						8					f	4		4	2021-01-22 11:52:50.639829+05	2021-01-22 11:52:50.639845+05
+15		Qozog'iston Mudofaa vazirligi						2					f	4		4	2021-01-22 11:49:38.14801+05	2021-01-22 11:53:32.286919+05
+14		Qozog'iston Moliya vazirligi						2					f	4		4	2021-01-22 11:47:15.762949+05	2021-01-22 11:53:44.852273+05
+12		Qozog'iston Adliya vazirligi						2					f	4		4	2021-01-22 11:41:45.707782+05	2021-01-22 11:53:55.21418+05
+11		Qozog'iston Energetika Vaziligi						2					f	4		4	2021-01-22 11:36:34.127966+05	2021-01-22 11:54:09.529211+05
 \.
 
 
@@ -743,6 +898,8 @@ COPY public.api_objecttype (id, name) FROM stdin;
 1	Agentlik
 4	Bank
 6	Yangiliklar
+7	Davlat
+8	IT
 \.
 
 
@@ -760,9 +917,9 @@ COPY public.api_resourcetype (id, name) FROM stdin;
 --
 
 COPY public.api_result (id, description, resultfile, user_id, website_id, created_at, updated_at, positive) FROM stdin;
-2	<p>asdasdsadasadasdsad</p>\r\n<p>123</p>\r\n<p>&nbsp;</p>\r\n<p>&nbsp;</p>\r\n<p><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg" alt="" width="546" height="340" /></p>\r\n<table style="border-collapse: collapse; width: 100%;" border="1">\r\n<tbody>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">sadsad</td>\r\n<td style="width: 15.1722%;">sad</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">asdasd</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">asdasd</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td style="width: 15.0625%;">&nbsp;</td>\r\n<td style="width: 15.0625%;">asdad</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">&nbsp;</td>\r\n<td style="width: 15.1722%;">sadasd</td>\r\n<td style="width: 15.1722%;">asdasdasd</td>\r\n</tr>\r\n</tbody>\r\n</table>	cli	1	3	2021-01-21 12:43:35.219787+05	2021-01-21 12:43:35.238005+05	f
-3	<p>wwqweqweqdadssdaaddsadasd</p>	fbdb_hfieoPP	3	3	2021-01-21 12:43:35.219787+05	2021-01-21 12:43:35.238005+05	f
-4	<p>12333333333333333333333333333333</p>	fbdb_O9un8BM	3	3	2021-01-21 12:43:35.219787+05	2021-01-21 16:44:55.992924+05	t
+5	<p>sadsadadad</p>	cli_file_6iHeUrb.c	4	15	2021-01-25 15:57:38.410642+05	2021-01-25 15:57:38.410691+05	t
+6	<p><img alt="" src="/media/uploads/2021/01/26/screenshot-from-2021-01-14-13-42-27.png" style="height:379px; width:600px" />sad</p>\r\n\r\n<p>asdsad</p>\r\n\r\n<p>asdsad</p>\r\n\r\n<p>asdad</p>\r\n\r\n<p>sadad</p>\r\n\r\n<p>&nbsp;</p>	Screenshot_from_2021-01-13_14-55-31.png	1	37	2021-01-26 10:24:11.448385+05	2021-01-26 10:24:11.448411+05	f
+7	<p><img alt="" src="/media/uploads/2021/01/26/screenshot-from-2021-01-14-13-42-27.png" style="height:252px; width:400px" /></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Sql injection orqali bir narsalar</p>\r\n\r\n<p>&nbsp;</p>	Screenshot_from_2020-10-28_16-28-52.png	1	39	2021-01-26 10:25:35.216907+05	2021-01-26 10:25:35.216932+05	f
 \.
 
 
@@ -771,13 +928,31 @@ COPY public.api_result (id, description, resultfile, user_id, website_id, create
 --
 
 COPY public.api_website (id, url, verified, object_id, user_id, created_at, updated_at, dirs, ip, open_ports, rtype_id, server_cor, subdomains, tech, vulnerabilities) FROM stdin;
-8	https://www.moi.gov.af	t	6	3	2021-01-21 12:43:35.248714+05	2021-01-21 16:50:09.010039+05				1				
-9	https://www.mfa.gov.af/	t	6	1	2021-01-21 12:43:35.248714+05	2021-01-21 16:50:09.011369+05				1				
-10	https://www.mail.gov.af/	t	6	1	2021-01-21 12:43:35.248714+05	2021-01-21 16:50:09.012632+05				1				
-3	https://mod.gov.af/	t	4	1	2021-01-21 12:43:35.248714+05	2021-01-21 16:52:58.925341+05				1				
-11	https://moec.gov.af/	f	4	1	2021-01-21 16:52:58.926169+05	2021-01-21 16:52:58.92618+05				1				
-12	https://moe.gov.af/	f	4	1	2021-01-21 16:52:58.957349+05	2021-01-21 16:52:58.957366+05				1				
-13	dsdsdsfsf	f	8	1	2021-01-21 18:16:24.741178+05	2021-01-21 18:16:24.74123+05				1				
+15	https://www.korem.kz/	f	11	4	2021-01-22 11:36:34.128745+05	2021-01-22 11:36:34.128755+05				1				
+16	https://www.nnc.kz/	f	11	4	2021-01-22 11:36:34.129346+05	2021-01-22 11:36:34.129356+05				1				
+17	https://www.kegoc.kz/ru	f	11	4	2021-01-22 11:36:34.129798+05	2021-01-22 11:36:34.129808+05				1				
+18	https://kea.kz/	f	11	4	2021-01-22 11:36:34.130279+05	2021-01-22 11:36:34.130289+05				1				
+19	http://www.samruk-energy.kz/ru/	f	11	4	2021-01-22 11:36:34.130786+05	2021-01-22 11:36:34.130797+05				1				
+20	https://www.kazenergy.com/ru/	f	11	4	2021-01-22 11:36:34.131293+05	2021-01-22 11:36:34.131303+05				1				
+21	http://energonews.kz/	f	11	4	2021-01-22 11:36:34.131801+05	2021-01-22 11:36:34.131811+05				1				
+22	http://minjust.kz/	f	12	4	2021-01-22 11:41:45.708626+05	2021-01-22 11:41:45.708637+05				1				
+23	http://www.government.kz/	f	12	4	2021-01-22 11:41:45.709416+05	2021-01-22 11:41:45.709429+05				1				
+24	https://zangerpalata.kz/	f	12	4	2021-01-22 11:41:45.71005+05	2021-01-22 11:41:45.710063+05				1				
+25	http://www.akorda.kz/ru	f	13	4	2021-01-22 11:45:31.15533+05	2021-01-22 11:45:31.155341+05				1				
+26	https://standard.kz/	f	13	4	2021-01-22 11:45:31.155991+05	2021-01-22 11:45:31.156002+05				1				
+27	http://www.parlam.kz/ru	f	13	4	2021-01-22 11:45:31.156491+05	2021-01-22 11:45:31.156501+05				1				
+28	http://shu.zhambyl.kz/	f	13	4	2021-01-22 11:45:31.157014+05	2021-01-22 11:45:31.157024+05				1				
+29	https://aqmeshit-aptalygy.kz/	f	13	4	2021-01-22 11:45:31.157573+05	2021-01-22 11:45:31.157585+05				1				
+30	https://primeminister.kz/ru	f	13	4	2021-01-22 11:45:31.158101+05	2021-01-22 11:45:31.158112+05				1				
+31	https://elbasy.kz/ru	f	13	4	2021-01-22 11:45:31.158634+05	2021-01-22 11:45:31.158645+05				1				
+32	http://www.minfin.gov.kz/irj/portal/anonymous	f	14	4	2021-01-22 11:47:15.763755+05	2021-01-22 11:47:15.763766+05				1				
+33	http://www.afk.kz/	f	14	4	2021-01-22 11:47:15.764417+05	2021-01-22 11:47:15.764427+05				1				
+34	https://www.gov.kz/memleket/entities/qriim?lang=kk	f	13	4	2021-01-22 11:48:33.031791+05	2021-01-22 11:48:33.0318+05				1				
+35	https://sarbaz.kz/	f	15	4	2021-01-22 11:49:38.148717+05	2021-01-22 11:49:38.148727+05				1				
+36	https://aacademymvd.kz/ru_RU/	f	15	4	2021-01-22 11:49:38.149277+05	2021-01-22 11:49:38.149287+05				1				
+38	https://www.nic.kz/;jsessionid=2E67BBEA6BE150C5859E3941D6428079	f	17	4	2021-01-22 11:52:50.640596+05	2021-01-22 11:52:50.640607+05				1				
+37	https://railnews.kz/kz/	f	16	4	2021-01-22 11:51:05.322055+05	2021-01-26 10:24:11.413283+05				1				
+39	https://polpred.com/?cat=5&cnt=69	f	17	4	2021-01-22 11:52:50.64121+05	2021-01-26 10:25:35.214185+05				1				
 \.
 
 
@@ -854,6 +1029,26 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 50	Can change website	11	change_website
 51	Can delete website	11	delete_website
 52	Can view website	11	view_website
+53	Can add bookmark	13	add_bookmark
+54	Can change bookmark	13	change_bookmark
+55	Can delete bookmark	13	delete_bookmark
+56	Can view bookmark	13	view_bookmark
+57	Can add pinned application	14	add_pinnedapplication
+58	Can change pinned application	14	change_pinnedapplication
+59	Can delete pinned application	14	delete_pinnedapplication
+60	Can view pinned application	14	view_pinnedapplication
+61	Can add user dashboard module	15	add_userdashboardmodule
+62	Can change user dashboard module	15	change_userdashboardmodule
+63	Can delete user dashboard module	15	delete_userdashboardmodule
+64	Can view user dashboard module	15	view_userdashboardmodule
+65	Can add kv store	16	add_kvstore
+66	Can change kv store	16	change_kvstore
+67	Can delete kv store	16	delete_kvstore
+68	Can view kv store	16	view_kvstore
+69	Can add file browser file	17	add_filebrowserfile
+70	Can change file browser file	17	change_filebrowserfile
+71	Can delete file browser file	17	delete_filebrowserfile
+72	Can view file browser file	17	view_filebrowserfile
 \.
 
 
@@ -863,8 +1058,8 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
 3	pbkdf2_sha256$216000$hAkTgFh9ABEF$kUsaD04iDFzhFN6h1S/Cm5cEtt9V8yho1zKZoMM7LkA=	2021-01-19 16:28:37+05	f	xon				t	t	2021-01-19 16:25:51+05
-4	pbkdf2_sha256$216000$wa4u7kWkkHH4$zBY62begQLIzUqv7+8EMBHTvbZp0ZhoNizsSuijdUPQ=	2021-01-21 18:07:11.332915+05	f	tohir				t	t	2021-01-21 18:03:36+05
-1	pbkdf2_sha256$216000$dIZpmxMrmsqX$otJ4CF8zkxjrbF37tdj44sa5NP0vM6v1TWET2GbFWrg=	2021-01-22 10:28:23.131445+05	t	admin			admin@example.com	t	t	2021-01-19 09:59:29.485358+05
+4	pbkdf2_sha256$216000$wa4u7kWkkHH4$zBY62begQLIzUqv7+8EMBHTvbZp0ZhoNizsSuijdUPQ=	2021-01-25 15:44:22.196279+05	f	tohir				t	t	2021-01-21 18:03:36+05
+1	pbkdf2_sha256$216000$dIZpmxMrmsqX$otJ4CF8zkxjrbF37tdj44sa5NP0vM6v1TWET2GbFWrg=	2021-01-25 18:24:07.709271+05	t	admin			admin@example.com	t	t	2021-01-19 09:59:29.485358+05
 \.
 
 
@@ -909,6 +1104,20 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 27	4	50
 28	4	51
 29	4	52
+\.
+
+
+--
+-- Data for Name: dashboard_userdashboardmodule; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.dashboard_userdashboardmodule (id, title, module, app_label, "user", "column", "order", settings, children, collapsed) FROM stdin;
+1	Quick links	jet.dashboard.modules.LinkList	\N	1	0	0	{"draggable": false, "deletable": false, "collapsible": false, "layout": "inline"}	[{"title": "Return to site", "url": "/"}, {"title": "Change password", "url": "/admin/password_change/"}, {"title": "Log out", "url": "/admin/logout/"}]	f
+2	Applications	jet.dashboard.modules.AppList	\N	1	1	0	{"models": null, "exclude": ["auth.*"]}		f
+3	Administration	jet.dashboard.modules.AppList	\N	1	2	0	{"models": ["auth.*"], "exclude": null}		f
+4	Recent Actions	jet.dashboard.modules.RecentActions	\N	1	0	1	{"limit": 10, "include_list": null, "exclude_list": null, "user": null}		f
+5	Latest Django News	jet.dashboard.modules.Feed	\N	1	1	1	{"feed_url": "http://www.djangoproject.com/rss/weblog/", "limit": 5}		f
+6	Support	jet.dashboard.modules.LinkList	\N	1	2	1	{"draggable": true, "deletable": true, "collapsible": true, "layout": "stacked"}	[{"title": "Django documentation", "url": "http://docs.djangoproject.com/", "external": true}, {"title": "Django \\"django-users\\" mailing list", "url": "http://groups.google.com/group/django-users", "external": true}, {"title": "Django irc channel", "url": "irc://irc.freenode.net/django", "external": true}]	f
 \.
 
 
@@ -973,6 +1182,35 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 54	2021-01-21 18:23:18.001622+05	5	Yangiliklar	1	[{"added": {}}]	8	1
 55	2021-01-21 18:24:08.380615+05	5	Yangiliklar	3		8	1
 56	2021-01-21 18:24:28.488748+05	6	Yangiliklar	1	[{"added": {}}]	8	1
+57	2021-01-22 11:11:34.374115+05	8	Qozog'iston banklari	3		10	1
+58	2021-01-22 11:11:34.399399+05	7	Qizlar savdo anjumani	3		10	1
+59	2021-01-22 11:11:34.407819+05	6	Afg'oniston Ichki ishlar vazirligi	3		10	1
+60	2021-01-22 11:11:34.416381+05	4	Afg’oniston Mudofaa vazirligi	3		10	1
+61	2021-01-22 11:14:09.453278+05	9		1	[{"added": {}}]	10	4
+62	2021-01-22 11:14:32.552528+05	9	Qozog'iston Yangiliklar Saytlari	2	[{"changed": {"fields": ["\\u041e\\u0431\\u044a\\u0435\\u043a\\u0442 \\u043d\\u043e\\u043c\\u0438"]}}]	10	4
+63	2021-01-22 11:14:49.195778+05	14	kun.uz	1	[{"added": {}}]	11	4
+64	2021-01-22 11:18:09.16543+05	10	Qozoq Mudofaa vazirligi	1	[{"added": {}}]	10	4
+65	2021-01-22 11:20:05.617089+05	14	kun.uz	3		11	4
+66	2021-01-22 11:21:54.395251+05	10	Qozoq Mudofaa vazirligi	3		10	4
+67	2021-01-22 11:21:54.407197+05	9	Qozog'iston Yangiliklar Saytlari	3		10	4
+68	2021-01-22 11:36:34.132412+05	11	Qozog'ston Energetika Vaziligi	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://www.korem.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://www.nnc.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://www.kegoc.kz/ru"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://kea.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://www.samruk-energy.kz/ru/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://www.kazenergy.com/ru/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://energonews.kz/"}}]	10	4
+69	2021-01-22 11:41:45.710763+05	12	Qozog'ston Adliya vazirligi	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://minjust.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://www.government.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://zangerpalata.kz/"}}]	10	4
+70	2021-01-22 11:42:07.469457+05	12	Qozog'ston Adliya vazirligi	2	[{"changed": {"fields": ["\\u0414\\u0430\\u0432\\u043b\\u0430\\u0442"]}}]	10	4
+71	2021-01-22 11:42:34.91708+05	7	Davlat	1	[{"added": {}}]	8	1
+72	2021-01-22 11:45:31.159289+05	13	Qozog'iston davlatiga tegishli saylar	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://www.akorda.kz/ru"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://standard.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://www.parlam.kz/ru"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://shu.zhambyl.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://aqmeshit-aptalygy.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://primeminister.kz/ru"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://elbasy.kz/ru"}}]	10	4
+73	2021-01-22 11:47:15.765042+05	14	Qozog'ston Moliya vazirligi	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://www.minfin.gov.kz/irj/portal/anonymous"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "http://www.afk.kz/"}}]	10	4
+74	2021-01-22 11:48:33.032421+05	13	Qozog'iston davlatiga tegishli saylar	2	[{"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://www.gov.kz/memleket/entities/qriim?lang=kk"}}]	10	4
+75	2021-01-22 11:49:38.149792+05	15	Qozog'ston Mudofaa vazirligi	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://sarbaz.kz/"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://aacademymvd.kz/ru_RU/"}}]	10	4
+76	2021-01-22 11:51:05.322675+05	16	Qozog'iston Transport vazirligi	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://railnews.kz/kz/"}}]	10	4
+77	2021-01-22 11:51:23.826693+05	8	IT	1	[{"added": {}}]	8	1
+78	2021-01-22 11:52:50.641747+05	17	Qozog'iston IT	1	[{"added": {}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://www.nic.kz/;jsessionid=2E67BBEA6BE150C5859E3941D6428079"}}, {"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u0440\\u0441", "object": "https://polpred.com/?cat=5&cnt=69"}}]	10	4
+79	2021-01-22 11:53:32.287883+05	15	Qozog'iston Mudofaa vazirligi	2	[{"changed": {"fields": ["\\u041e\\u0431\\u044a\\u0435\\u043a\\u0442 \\u043d\\u043e\\u043c\\u0438"]}}]	10	4
+80	2021-01-22 11:53:44.853348+05	14	Qozog'iston Moliya vazirligi	2	[{"changed": {"fields": ["\\u041e\\u0431\\u044a\\u0435\\u043a\\u0442 \\u043d\\u043e\\u043c\\u0438"]}}]	10	4
+81	2021-01-22 11:53:55.215016+05	12	Qozog'iston Adliya vazirligi	2	[{"changed": {"fields": ["\\u041e\\u0431\\u044a\\u0435\\u043a\\u0442 \\u043d\\u043e\\u043c\\u0438"]}}]	10	4
+82	2021-01-22 11:54:09.530405+05	11	Qozog'iston Energetika Vaziligi	2	[{"changed": {"fields": ["\\u041e\\u0431\\u044a\\u0435\\u043a\\u0442 \\u043d\\u043e\\u043c\\u0438"]}}]	10	4
+83	2021-01-25 15:57:38.428894+05	5	https://www.korem.kz/	1	[{"added": {}}]	12	4
+84	2021-01-26 10:24:11.469748+05	37	https://railnews.kz/kz/	2	[{"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u043b\\u0442\\u0430\\u0442", "object": "https://railnews.kz/kz/"}}]	11	1
+85	2021-01-26 10:25:35.220079+05	39	https://polpred.com/?cat=5&cnt=69	2	[{"added": {"name": "\\u0420\\u0435\\u0441\\u0443\\u043b\\u0442\\u0430\\u0442", "object": "https://polpred.com/?cat=5&cnt=69"}}]	11	1
 \.
 
 
@@ -993,6 +1231,11 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 10	api	object
 12	api	result
 11	api	website
+13	jet	bookmark
+14	jet	pinnedapplication
+15	dashboard	userdashboardmodule
+16	thumbnail	kvstore
+17	mce_filebrowser	filebrowserfile
 \.
 
 
@@ -1033,6 +1276,15 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 30	api	0012_auto_20210121_0743	2021-01-21 12:43:35.262931+05
 31	api	0013_auto_20210121_1127	2021-01-21 16:27:13.282167+05
 32	api	0014_auto_20210121_1143	2021-01-21 16:43:44.744556+05
+33	jet	0001_initial	2021-01-22 15:42:17.956552+05
+34	jet	0002_delete_userdashboardmodule	2021-01-22 15:42:18.07781+05
+35	dashboard	0001_initial	2021-01-22 15:48:03.496351+05
+36	api	0015_auto_20210125_1040	2021-01-25 15:40:27.982505+05
+37	thumbnail	0001_initial	2021-01-25 16:55:04.509585+05
+38	api	0016_auto_20210125_1403	2021-01-25 19:04:06.792841+05
+39	api	0017_auto_20210126_0451	2021-01-26 09:51:37.609784+05
+40	api	0018_auto_20210126_0500	2021-01-26 10:00:14.11728+05
+41	api	0019_auto_20210126_0504	2021-01-26 10:04:44.372511+05
 \.
 
 
@@ -1043,13 +1295,37 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 yfyipyyg93xglo3e4iiei0riegeu20la	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l1j7M:EftScpzI7qauK8k0600cwADj5Hn99uVYWq8DqBYs4BM	2021-02-02 09:59:48.970594+05
 bve1uiyic33om58b1nbjo2z1jp6dka8t	.eJxVjEEOwiAQRe_C2hCGIWBduvcMZAamUjWQlHbVeHdt0oVu_3vvbyrSupS4dpnjlNVFoTr9bkzpKXUH-UH13nRqdZkn1ruiD9r1rWV5XQ_376BQL9_aeuIkDoMHJBIjaDgPzlkJGIIPKGDh7NyYM4MXw2RgtIwDsAGDTr0_2403SQ:1l1pBd:D2YgietfHsIeaxkRdL5tE4uvwoAM-y8KpZbLSfE9fRE	2021-02-02 16:28:37.907098+05
-fkbc9bdywnz1gluogmg1515duh4agau0	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l29mN:WqPW2SWHjWfCtbIBHjPz3wVCYWJevS4b-og_nLSigVY	2021-02-03 14:27:55.892377+05
 c4ebf1nansomwdaetus1jp715ugou4ee	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l2YYQ:5W5OhdXungs0G9EiBgFbvBwLZWZf9w3lIl4lyCS7jLI	2021-02-04 16:55:10.601799+05
 ufs6lf74cjfrlg6o4wuzpyxa012t4wfx	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l2YYm:SLih_wz2HyJBnCAxD4RqepIuxVpvUmtO2owg92CU4n8	2021-02-04 16:55:32.791986+05
 b6lno2bo3d73pi42tgw1bnvgg2560uho	.eJxVjLsOQiEQBf-F2pAFQRZLe7-BLLDIVQPJfVTGf1eSW2hxmjOTeYlA21rDtvAcpizOwojD7xcpPbgNkO_Ubl2m3tZ5inIocqeLvPbMz8vu_gUqLXVkExZmV6CA86QYPFhrQBu2RrmYNHvUnLFohFP-jpA0xiOBMsUlFO8P3F03ew:1l2ZeZ:i88DU_pv9fmZ1SB_D9zlCnab_LzzFNf4VM-kt5nrTJE	2021-02-04 18:05:35.045774+05
-rqtpl7xn71h6m4d65dcymi1b7gti5j84	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l2Zjt:0W09w8fcywi0sVwcuz4BX_jreJwQxRu_mwy9w6K7IHM	2021-02-04 18:11:05.007367+05
 dlgg0xz2r1jlcda0jvmn2o39qvjb6v0l	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l2Zxi:eOsNQqx1Jhywq1QyXSFzXdVYDv5lhedWDq8LWU8qlA0	2021-02-04 18:25:22.498253+05
-39wzs937ryi1fw841032ps8n70n1w1ry	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l2ozf:9cWYN0J5-92GSO1bbvwU1R3yrprZYAgzAChyFNyvjx0	2021-02-05 10:28:23.273626+05
+d0fypiy3tfal53g19t89ht19kfwke0gm	.eJxVjLsOQiEQBf-F2pAFQRZLe7-BLLDIVQPJfVTGf1eSW2hxmjOTeYlA21rDtvAcpizOwojD7xcpPbgNkO_Ubl2m3tZ5inIocqeLvPbMz8vu_gUqLXVkExZmV6CA86QYPFhrQBu2RrmYNHvUnLFohFP-jpA0xiOBMsUlFO8P3F03ew:1l2peQ:kLW3WpdPXRwyZdOYOxcno_XClRE6qccDqv57O5yvi_U	2021-02-05 11:10:30.331664+05
+pz6giwmprw4605f95mv7u155q33sig1v	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l401j:O4wTFe4zDYBvYS95GevAGvVLFsQ0RbnUP2I8bYGm7Pg	2021-02-08 16:27:23.622538+05
+4hqb9f298fjly2ktqnar49wvix0r1ot9	.eJxVjMEOwiAQRP-FsyFbukLx6L3fQBYWpGogKe3J-O9K0oNe5jDvzbyEo33Lbm9xdQuLixjE6bfzFB6xdMB3KrcqQy3bunjZFXnQJufK8Xk93L-DTC1_16NOQCYpC8oEHREnnRhh9KiIIYDuYcnDxJ7VGSAyGrY4EkIcbBLvD9d9N7c:1l41qh:bsEmUlDz3jF4canHzlmSPzSGHM21VBSU2VsE_pbfG08	2021-02-08 18:24:07.717858+05
+\.
+
+
+--
+-- Data for Name: jet_bookmark; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jet_bookmark (id, url, title, "user", date_add) FROM stdin;
+\.
+
+
+--
+-- Data for Name: jet_pinnedapplication; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jet_pinnedapplication (id, app_label, "user", date_add) FROM stdin;
+\.
+
+
+--
+-- Data for Name: thumbnail_kvstore; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.thumbnail_kvstore (key, value) FROM stdin;
 \.
 
 
@@ -1064,14 +1340,14 @@ SELECT pg_catalog.setval('public.api_country_id_seq', 6, true);
 -- Name: api_object_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.api_object_id_seq', 8, true);
+SELECT pg_catalog.setval('public.api_object_id_seq', 17, true);
 
 
 --
 -- Name: api_objecttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.api_objecttype_id_seq', 6, true);
+SELECT pg_catalog.setval('public.api_objecttype_id_seq', 8, true);
 
 
 --
@@ -1085,14 +1361,14 @@ SELECT pg_catalog.setval('public.api_resourcetype_id_seq', 1, true);
 -- Name: api_result_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.api_result_id_seq', 4, true);
+SELECT pg_catalog.setval('public.api_result_id_seq', 7, true);
 
 
 --
 -- Name: api_websites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.api_websites_id_seq', 13, true);
+SELECT pg_catalog.setval('public.api_websites_id_seq', 39, true);
 
 
 --
@@ -1113,7 +1389,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 52, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 72, true);
 
 
 --
@@ -1138,24 +1414,45 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 29, true);
 
 
 --
+-- Name: dashboard_userdashboardmodule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.dashboard_userdashboardmodule_id_seq', 6, true);
+
+
+--
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 56, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 85, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 12, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 17, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 32, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 41, true);
+
+
+--
+-- Name: jet_bookmark_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jet_bookmark_id_seq', 1, false);
+
+
+--
+-- Name: jet_pinnedapplication_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jet_pinnedapplication_id_seq', 1, false);
 
 
 --
@@ -1303,6 +1600,14 @@ ALTER TABLE ONLY public.auth_user
 
 
 --
+-- Name: dashboard_userdashboardmodule dashboard_userdashboardmodule_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.dashboard_userdashboardmodule
+    ADD CONSTRAINT dashboard_userdashboardmodule_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1340,6 +1645,30 @@ ALTER TABLE ONLY public.django_migrations
 
 ALTER TABLE ONLY public.django_session
     ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: jet_bookmark jet_bookmark_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jet_bookmark
+    ADD CONSTRAINT jet_bookmark_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jet_pinnedapplication jet_pinnedapplication_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jet_pinnedapplication
+    ADD CONSTRAINT jet_pinnedapplication_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: thumbnail_kvstore thumbnail_kvstore_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.thumbnail_kvstore
+    ADD CONSTRAINT thumbnail_kvstore_pkey PRIMARY KEY (key);
 
 
 --
@@ -1487,6 +1816,13 @@ CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING 
 --
 
 CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: thumbnail_kvstore_key_3f850178_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX thumbnail_kvstore_key_3f850178_like ON public.thumbnail_kvstore USING btree (key varchar_pattern_ops);
 
 
 --

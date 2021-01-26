@@ -1,7 +1,8 @@
 from django.db import models
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User
-
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
 
 # Create your models here.
@@ -47,7 +48,7 @@ class Object(models.Model):
     ips=models.TextField(blank=True,verbose_name="IP адреслар")
     verified=models.BooleanField(default=False,verbose_name="Текширилган")
     description=models.TextField(blank=True,verbose_name="Тавсиф")
-    content = HTMLField(blank=True,verbose_name="Ресултат")
+    content = RichTextUploadingField(blank=True,verbose_name="Ресултат")
     resultfile = models.FileField(verbose_name="Ресултат файл",blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -86,7 +87,7 @@ class Result(models.Model):
   user=models.ForeignKey(User,on_delete=models.CASCADE)
   website=models.ForeignKey(Website,on_delete=models.CASCADE,verbose_name="Сайт")
   positive=models.BooleanField(default=False,verbose_name="Natija")
-  description=HTMLField(blank=True,verbose_name="Ресултат")
+  description=RichTextUploadingField(blank=True,verbose_name="Ресултат")
   resultfile = models.FileField(verbose_name="Ресултат файл",blank=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
