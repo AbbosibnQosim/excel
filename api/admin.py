@@ -5,7 +5,7 @@ from tinymce.widgets import TinyMCE
 from api.models import ObjectType, ResourceType, Country,Object, Website,Result
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-
+from urllib.parse import urlparse
 admin.site.register(ObjectType)
 admin.site.register(Country)    
 admin.site.register(ResourceType)
@@ -112,13 +112,19 @@ class ChapterResult(admin.ModelAdmin):
     #         kwargs.update({'fields': fields})
     #     return super(PostAdmin, self).get_form(request, obj=None, **kwargs)
     
-    
+class MyArticleAdminForm(forms.ModelForm):
+    def clean_url(self):
+        url = self.cleaned_data['url']
+        if Website.objects.filter(url=urlparse(url).netloc).exists():
+         raise forms.ValidationError('Bu sayt kiritilgan!')
+        return url  
 
 
 class ChapterWebsite(admin.ModelAdmin):
     inlines=[ResInline]
     search_fields=['url']
     exclude = ['user']
+    form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
     def country(self, obj):
@@ -126,6 +132,7 @@ class ChapterWebsite(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not change:
             obj.user = request.user
+            obj.url=urlparse(obj.url).netloc
         obj.save()
     # def has_change_permission(self, request, obj=None):
     #     has_class_permission = super(ChapterWebsite, self).has_change_permission(request, obj)
@@ -141,13 +148,17 @@ class ChapterWebsite(admin.ModelAdmin):
         if obj is not None and not request.user.is_superuser and request.user.id != obj.user.id:
             return False
         return True
-
+class MyArticleAdminForm(forms.ModelForm):
+    def clean_url(self):
+        
+        return self.cleaned_data["url"]
 
 class ChapterAdmin(ImportExportModelAdmin):
     search_fields = ['name']
     list_filter=['created_at','obtype']
     resource_class = BookResource
     inlines = [WebsiteInline]
+    form = MyArticleAdminForm
     list_display = ('country', 'obtype','name','user','created_at','updated_at')
     def name(self):
         return 'Davlat'

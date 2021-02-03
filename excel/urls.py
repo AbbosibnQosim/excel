@@ -20,12 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 urlpatterns = [
-path('api/',include('api.urls')),
+    path('api/',include('api.urls')),
     path('', RedirectView.as_view(url=reverse_lazy('index'))),
- path('', RedirectView.as_view(url=reverse_lazy('admin:index'))),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     #path('tinymce/', include('tinymce.urls')),
-    #path('jet/', include('jet.urls', 'jet')),
+    path('jet/', include('jet.urls', 'jet')),
     #path('grappelli/', include('grappelli.urls')),  # Django JET URLS
     path('admin/', admin.site.urls),
     
