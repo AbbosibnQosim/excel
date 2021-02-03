@@ -133,6 +133,8 @@ class ChapterWebsite(admin.ModelAdmin):
         if not change:
             obj.user = request.user
             obj.url=urlparse(obj.url).netloc
+        else:
+            obj.url=urlparse(obj.url).netloc
         obj.save()
     # def has_change_permission(self, request, obj=None):
     #     has_class_permission = super(ChapterWebsite, self).has_change_permission(request, obj)
