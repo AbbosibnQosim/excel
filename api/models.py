@@ -60,7 +60,7 @@ class Object(models.Model):
 
 class Website(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    url=models.CharField(max_length=2048,unique=True,blank=False)
+    url=models.CharField(max_length=2048,unique=True,blank=False,null=False)
     object=models.ForeignKey(Object,on_delete=models.CASCADE)
     rtype=models.ForeignKey(ResourceType,on_delete=models.CASCADE,verbose_name='Ресурс тури')
     ip=models.CharField(blank=True,max_length=16,verbose_name='IP адрес')
