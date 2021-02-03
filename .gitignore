@@ -2,7 +2,8 @@
 *.db
 *~
 .*
-
+/media
+/static
 /site/
 /htmlcov/
 /coverage/

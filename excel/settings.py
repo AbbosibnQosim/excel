@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+LOGIN_URL = '/admin/login'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -24,8 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'w)d)u1k6$%1z53p7^g3cjr*653%wsjq(gvi4e6q78tthg_!z!c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['10.10.11.166','localhost']
+X_FRAME_OPTIONS = 'ALLOWALL'
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
+MAX_UPLOAD_SIZE = "5242880"
+DEBUG = False
+ALLOWED_HOSTS = ['10.10.10.173','localhost']
 MEDIA_ROOT = 'media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, '/media')
 MEDIA_URL = '/media/'
@@ -154,7 +157,10 @@ JET_THEMES = [
 
 JET_SIDE_MENU_COMPACT = True
 INSTALLED_APPS = [
-    'jet',
+    #'jet',
+    'adminlte3',
+     # Optional: Django admin theme (must be before django.contrib.admin)
+    'adminlte3_theme',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

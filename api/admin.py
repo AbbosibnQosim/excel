@@ -30,7 +30,7 @@ class YourInlineFormset(forms.models.BaseInlineFormSet):
         if commit:
             obj.save()
         return obj
-class WebsiteInline(admin.TabularInline):
+class WebsiteInline(admin.StackedInline):
     model = Website
     formset = YourInlineFormset
     fields=['url','rtype','user']
@@ -56,7 +56,7 @@ class WebsiteInline(admin.TabularInline):
 
 
 
-class ResInline(admin.TabularInline):
+class ResInline(admin.StackedInline):
     model = Result
     formset = YourInlineFormset
     readonly_fields=['user']
@@ -78,6 +78,7 @@ class ResInline(admin.TabularInline):
 
 class ChapterResult(admin.ModelAdmin):
     #readonly_fields=('html_stripped',)
+    search_fields=['website__url']
     exclude = ['user']
     list_filter=['user','website__object__country__name','positive','created_at']
     list_display=['website','user','positive','created_at','updated_at']
@@ -116,6 +117,7 @@ class ChapterResult(admin.ModelAdmin):
 
 class ChapterWebsite(admin.ModelAdmin):
     inlines=[ResInline]
+    search_fields=['url']
     exclude = ['user']
     list_filter=['user','object__country__name','rtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
@@ -143,7 +145,7 @@ class ChapterWebsite(admin.ModelAdmin):
 
 class ChapterAdmin(ImportExportModelAdmin):
     search_fields = ['name']
-    list_filter=['country','user','created_at']
+    list_filter=['created_at','obtype']
     resource_class = BookResource
     inlines = [WebsiteInline]
     list_display = ('country', 'obtype','name','user','created_at','updated_at')
@@ -152,9 +154,9 @@ class ChapterAdmin(ImportExportModelAdmin):
     name.short_description='Davlat'
     exclude = ['user']
     def get_queryset(self, request):
-        if request.user.is_superuser:
+       # if request.user.is_superuser:
             return Object.objects.all()
-        return Object.objects.filter(user=request.user)
+       # return Object.objects.filter(user=request.user)
     # def has_change_permission(self, request, obj=None):
     #     has_class_permission = super(ChapterAdmin, self).has_change_permission(request, obj)
     #     if not has_class_permission:
