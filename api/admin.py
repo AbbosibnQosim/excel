@@ -130,7 +130,7 @@ class ChapterWebsite(admin.ModelAdmin):
     form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
-    autocomplete_fields=['country']
+    autocomplete_fields=['object']
     def country(self, obj):
         return obj.object.country.name
     def save_model(self, request, obj, form, change):
@@ -162,7 +162,7 @@ class MyArticleAdminForm(forms.ModelForm):
         return self.cleaned_data["url"]
 
 class ChapterAdmin(ImportExportModelAdmin):
-    search_fields = ['name']
+    search_fields = ['country__name','name']
     list_filter=['created_at','obtype']
     resource_class = BookResource
     inlines = [WebsiteInline]
