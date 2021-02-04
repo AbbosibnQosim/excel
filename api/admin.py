@@ -125,12 +125,12 @@ class MyArticleAdminForm(forms.ModelForm):
 
 class ChapterWebsite(admin.ModelAdmin):
     inlines=[ResInline]
-    search_fields=['url']
+    search_fields=['country']
     exclude = ['user']
     form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
-    autocomplete_fields=['object']
+    autocomplete_fields=['country']
     def country(self, obj):
         return obj.object.country.name
     def save_model(self, request, obj, form, change):
