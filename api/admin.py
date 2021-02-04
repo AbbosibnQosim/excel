@@ -117,6 +117,9 @@ class MyArticleAdminForm(forms.ModelForm):
         url = self.cleaned_data['url']
         if Website.objects.filter(url=urlparse(url).netloc).exists():
          raise forms.ValidationError('Bu sayt kiritilgan!')
+        if urlparse(url).netloc=='':
+         raise forms.ValidationError("Noto'g'ri sayt!")
+
         return url  
 
 
@@ -127,13 +130,15 @@ class ChapterWebsite(admin.ModelAdmin):
     form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
-    autocomplete_fields=['country']
+    autocomplete_fields=['object']
     def country(self, obj):
         return obj.object.country.name
     def save_model(self, request, obj, form, change):
         if not change:
             obj.user = request.user
             obj.url=urlparse(obj.url).netloc
+            print("URLLLLLLLLLLLLLLLLLL")
+            print(obj.url)
         else:
             obj.url=urlparse(obj.url).netloc
         obj.save()
