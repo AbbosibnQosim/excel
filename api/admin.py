@@ -7,7 +7,13 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from urllib.parse import urlparse
 admin.site.register(ObjectType)
-admin.site.register(Country)    
+
+
+class ChapterCountry(admin.ModelAdmin):
+    search_fields=['name']
+
+
+admin.site.register(Country,ChapterCountry)    
 admin.site.register(ResourceType)
 class BookResource(resources.ModelResource):
     class Meta:
@@ -125,14 +131,14 @@ class MyArticleAdminForm(forms.ModelForm):
 
 class ChapterWebsite(admin.ModelAdmin):
     inlines=[ResInline]
-    search_fields=['country']
+    search_fields=['url']
     exclude = ['user']
     form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
-    autocomplete_fields=['object']
+    autocomplete_fields=['object','country']
     def country(self, obj):
-        return obj.object.country.name
+        return obj.object.country
     def save_model(self, request, obj, form, change):
         if not change:
             obj.user = request.user
@@ -162,7 +168,7 @@ class MyArticleAdminForm(forms.ModelForm):
         return self.cleaned_data["url"]
 
 class ChapterAdmin(ImportExportModelAdmin):
-    search_fields = ['country__name','name']
+    search_fields = ['name']
     list_filter=['created_at','obtype']
     resource_class = BookResource
     inlines = [WebsiteInline]
