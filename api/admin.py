@@ -133,12 +133,12 @@ class ChapterResult(admin.ModelAdmin):
 
 class MyArticleAdminForm(forms.ModelForm):
     country = forms.ModelChoiceField(queryset=Country.objects.all(), 
-                                 widget=autocomplete.ModelSelect2(url='country-autocomplete'),
+                                 widget=autocomplete.ModelSelect2(url='country-autocomplete',),label='Давлат',
                                  required=False)
     type = forms.ModelChoiceField(queryset=ObjectType.objects.all(), 
                                  widget=autocomplete.ModelSelect2(url='type-autocomplete'),
-                                 required=False)                            
-    object = forms.ModelChoiceField(queryset=Object.objects.all(),
+                                 required=False,label='Объект тури')                            
+    object = forms.ModelChoiceField(queryset=Object.objects.all(),label='Объект',
                                     widget=autocomplete.ModelSelect2(url='object-autocomplete',
                                                                      forward=['country','type']))
     def clean_url(self):
@@ -152,6 +152,7 @@ class MyArticleAdminForm(forms.ModelForm):
     class Meta:
         model = Website
         fields = '__all__'
+        
 
 class ChapterWebsite(admin.ModelAdmin):
     class Media:
@@ -161,6 +162,7 @@ class ChapterWebsite(admin.ModelAdmin):
             'fields': ('url', 'country','type', 'object','rtype','ip','server_cor','subdomains','dirs','tech','open_ports','vulnerabilities','verified'),
         }),
     )
+   
     inlines=[ResInline]
     search_fields=['url']
     exclude = ['user']
