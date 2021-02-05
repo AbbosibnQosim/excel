@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django import forms
+from dal import autocomplete
 from django.utils.html import format_html
 from tinymce.widgets import TinyMCE
 from api.models import ObjectType, ResourceType, Country,Object, Website,Result
@@ -117,8 +118,29 @@ class ChapterResult(admin.ModelAdmin):
     #         # and return the ModelForm instance you require for the user given their perms
     #         kwargs.update({'fields': fields})
     #     return super(PostAdmin, self).get_form(request, obj=None, **kwargs)
-    
+
+# class WebsiteForm(forms.ModelForm):
+#     country = forms.ModelChoiceField(queryset=Country.objects.all(), 
+#                                  widget=autocomplete.ModelSelect2(url='your_company_auto_url'),
+#                                  required=False)
+#     object = forms.ModelChoiceField(queryset=Department.objects.all(),
+#                                     widget=autocomplete.ModelSelect2(url='your_department_auto_url',
+#                                                                      forward=['country']))
+#     class Meta:
+#         model = Website
+#         fields = '__all__'
+
+
 class MyArticleAdminForm(forms.ModelForm):
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), 
+                                 widget=autocomplete.ModelSelect2(url='country-autocomplete'),
+                                 required=False)
+    type = forms.ModelChoiceField(queryset=ObjectType.objects.all(), 
+                                 widget=autocomplete.ModelSelect2(url='type-autocomplete'),
+                                 required=False)                            
+    object = forms.ModelChoiceField(queryset=Object.objects.all(),
+                                    widget=autocomplete.ModelSelect2(url='object-autocomplete',
+                                                                     forward=['country','type']))
     def clean_url(self):
         url = self.cleaned_data['url']
         if Website.objects.filter(url=urlparse(url).netloc).exists():
@@ -127,18 +149,24 @@ class MyArticleAdminForm(forms.ModelForm):
          raise forms.ValidationError("Noto'g'ri sayt!")
 
         return url  
-
+    class Meta:
+        model = Website
+        fields = '__all__'
 
 class ChapterWebsite(admin.ModelAdmin):
+    class Media:
+                 css = {"all": ("hello.css",)}
+    fieldsets = (
+        (None, {
+            'fields': ('url', 'country','type', 'object','rtype','ip','server_cor','subdomains','dirs','tech','open_ports','vulnerabilities','verified'),
+        }),
+    )
     inlines=[ResInline]
     search_fields=['url']
     exclude = ['user']
     form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','object__obtype__name','created_at']
-    list_display=['url','country','user','rtype','created_at']
-    autocomplete_fields=['country']
-    def country(self, obj):
-        return obj.object.country
+    list_display=['url','user','rtype','created_at']
     def save_model(self, request, obj, form, change):
         if not change:
             obj.user = request.user

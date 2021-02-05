@@ -4,6 +4,55 @@ from api.models import ObjectType, ResourceType, Country,Object, Website,Result
 import datetime
 from django.contrib.auth.models import User
 import json
+from dal import autocomplete
+
+
+class ObjectAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Object.objects.none()
+
+        qs = Object.objects.all()
+
+        country = self.forwarded.get('country', None)
+        type = self.forwarded.get('type', None)
+
+        if country:
+            qs = qs.filter(country=country)
+        if type:
+            qs = qs.filter(obtype=type)
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
+class CountryAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Country.objects.none()
+
+        qs = Country.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
+class TypeAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return ObjectType.objects.none()
+
+        qs = ObjectType.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+
+
+
+
+
+
 
 def index(request):
     all_objects=Website.objects.all().count();

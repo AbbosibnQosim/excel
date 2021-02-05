@@ -28,7 +28,7 @@ X_FRAME_OPTIONS = 'ALLOWALL'
 XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 MAX_UPLOAD_SIZE = "5242880"
 DEBUG = True
-ALLOWED_HOSTS = ['10.10.10.173','localhost']
+ALLOWED_HOSTS = ['10.10.10.173','localhost','10.10.11.166']
 MEDIA_ROOT = 'media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, '/media')
 MEDIA_URL = '/media/'
@@ -157,10 +157,12 @@ JET_THEMES = [
 
 JET_SIDE_MENU_COMPACT = True
 INSTALLED_APPS = [
-    'jet',
     #'adminlte3',
      # Optional: Django admin theme (must be before django.contrib.admin)
     #'adminlte3_theme',
+    'dal',
+    'dal_select2',
+    'jet',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -171,7 +173,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'import_export',
     'ckeditor',
-    'ckeditor_uploader'    #'tinymce',
+    'ckeditor_uploader',   #'tinymce',
 ]
 CKEDITOR_UPLOAD_PATH = "uploads/"
 MIDDLEWARE = [

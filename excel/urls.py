@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,reverse_lazy
-from django.conf.urls import include
+from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
+
 from django.views.generic.base import RedirectView
+from api.views import CountryAutocomplete,ObjectAutocomplete,TypeAutocomplete
+
+
 urlpatterns = [
     path('api/',include('api.urls')),
     path('', RedirectView.as_view(url=reverse_lazy('index'))),
@@ -27,6 +31,21 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     #path('grappelli/', include('grappelli.urls')),  # Django JET URLS
     path('admin/', admin.site.urls),
+    url(
+        r'^country-autocomplete/$',
+        CountryAutocomplete.as_view(),
+        name='country-autocomplete',
+    ),
+    url(
+        r'^object-autocomplete/$',
+        ObjectAutocomplete.as_view(),
+        name='object-autocomplete',
+    ),
+    url(
+        r'^type-autocomplete/$',
+        TypeAutocomplete.as_view(),
+        name='type-autocomplete',
+    ),
     
 ]
 if settings.DEBUG:

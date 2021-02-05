@@ -58,6 +58,10 @@ class Object(models.Model):
         verbose_name_plural = 'Объектлар'
         verbose_name = 'Объект'
 
+
+
+
+
 class Website(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     url=models.CharField(max_length=2048,unique=True,blank=False,null=False)
