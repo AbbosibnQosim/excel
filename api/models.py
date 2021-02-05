@@ -7,7 +7,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 class Country(models.Model):
-    name=models.CharField(max_length=512)
+    name=models.CharField(max_length=512,verbose_name='Давлат номи')
     def __str__(self):
       return self.name
     class Meta:
@@ -16,14 +16,14 @@ class Country(models.Model):
 
 
 class ObjectType(models.Model):
-    name=models.CharField(max_length=512)
+    name=models.CharField(max_length=512,verbose_name='Объект тури')
     def __str__(self):
       return self.name
     class Meta:
         verbose_name_plural = 'Объект турлари'
         verbose_name = 'Объект тури'
 class ResourceType(models.Model):
-    name=models.CharField(max_length=512)
+    name=models.CharField(max_length=512,verbose_name='Ресурс тури')
     def __str__(self):
       return self.name
     class Meta:
