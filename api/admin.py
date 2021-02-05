@@ -134,7 +134,7 @@ class ChapterWebsite(admin.ModelAdmin):
     search_fields=['url']
     exclude = ['user']
     form=MyArticleAdminForm
-    list_filter=['user','object__country__name','rtype__name','object__obtype_name','created_at']
+    list_filter=['user','object__country__name','rtype__name','object__obtype__name','created_at']
     list_display=['url','country','user','rtype','created_at']
     autocomplete_fields=['country']
     def country(self, obj):
