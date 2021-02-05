@@ -136,7 +136,7 @@ class ChapterWebsite(admin.ModelAdmin):
     form=MyArticleAdminForm
     list_filter=['user','object__country__name','rtype__name','object__obtype_name','created_at']
     list_display=['url','country','user','rtype','created_at']
-    autocomplete_fields=['object']
+    autocomplete_fields=['country']
     def country(self, obj):
         return obj.object.country
     def save_model(self, request, obj, form, change):
