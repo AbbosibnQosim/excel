@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from api.models import ObjectType, ResourceType, Country,Object, Website,Result
 import datetime
@@ -53,7 +54,7 @@ class TypeAutocomplete(autocomplete.Select2QuerySetView):
 
 
 
-
+@method_decorator(login_required)
 def index(request):
     all_objects=Website.objects.all().count();
     verified=Website.objects.filter(verified=True).count();
