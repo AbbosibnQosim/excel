@@ -55,7 +55,7 @@ class TypeAutocomplete(autocomplete.Select2QuerySetView):
 
 
 
-@method_decorator(login_required)
+@login_required()
 def index(request):
     all_objects=Website.objects.all().count();
     verified=Website.objects.filter(verified=True).count();
