@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from api.models import ObjectType, ResourceType, Country,Object, Website,Result
 import datetime
+from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 import json
 from dal import autocomplete
