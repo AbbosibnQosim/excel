@@ -58,7 +58,6 @@ class WebsiteInline(admin.StackedInline):
         #has_class_permission = super(WebsiteInline, self).has_delete_permission(request, obj)
         #if not has_class_permission:
             #return False
-        
         return False
 
 
@@ -143,10 +142,11 @@ class MyArticleAdminForm(forms.ModelForm):
                                                                      forward=['country','type']))
     def clean_url(self):
         url = self.cleaned_data['url']
-        if Website.objects.filter(url=urlparse(url).netloc).exists():
-         raise forms.ValidationError('Bu sayt kiritilgan!')
-        if urlparse(url).netloc=='':
-         raise forms.ValidationError("Noto'g'ri sayt!")
+        if self.instance.pk is None:
+            if Website.objects.filter(url=urlparse(url).netloc).exists():
+                raise forms.ValidationError('Bu sayt kiritilgan!')
+            if urlparse(url).netloc=='':
+                raise forms.ValidationError("Noto'g'ri sayt!")
 
         return url  
     class Meta:
@@ -175,8 +175,6 @@ class ChapterWebsite(admin.ModelAdmin):
             obj.url=urlparse(obj.url).netloc
             print("URLLLLLLLLLLLLLLLLLL")
             print(obj.url)
-        else:
-            obj.url=urlparse(obj.url).netloc
         obj.save()
     # def has_change_permission(self, request, obj=None):
     #     has_class_permission = super(ChapterWebsite, self).has_change_permission(request, obj)
